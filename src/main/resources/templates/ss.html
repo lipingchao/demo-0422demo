@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        function myAjax() {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET","/testAnt",true);
+            xmlhttp.send(null);
+            xmlhttp.onreadystatechange=function (result) {
+                alert(eval(result))
+                if (xmlHttp.readyState ==4 && xmlHttp.status ==200){
+                    alert(eval(xmlhttp.responseText));
+                    alert(typeof xmlhttp.responseText)
+                }
+            }
+        }
+
+        function postMain() {
+            xmlHttp = new XMLHttpRequest();
+            var pathname = window.location.pathname;
+            xmlHttp.open("post","/testAnt/",true);
+            xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlHttp.send('{"name":"moses"}') ;   // 请求体数据
+            xmlHttp.onreadystatechange = function() {
+                if (xmlHttp.readyState ==4 && xmlHttp.status ==200){
+                    alert(xmlHttp.responseText)
+                }
+            };
+        }
+        var pathname = location.pathname;
+        alert(pathname)
+    /*]]>*/
+</script>
+<div>
+    <marquee direction="left" align="bottom" height="60" width="100%" onmouseout="this.start()"
+             onmouseover="this.stop()" scrollamount="2" scrolldelay="1">
+        <h3>
+            <font color="#FF0000">欢</font><font
+                color="#E3001C">迎</font><font color="#C70038">来</font><font color="#AB0054">到</font><font
+                color="#8F0070">小</font><font color="#73008C">猿</font><font color="#5700A8">图</font><font
+                color="#3B00C4">书</font><font color="#1F00E0">馆</font>
+        </h3>
+    </marquee>
+</div>
+
+<button th:onclick="myAjax()">原生get</button>
+<button th:onclick="postMain()">原生post</button>
+
+<script>
+    /*<![CDATA[*/
+    function msg() {
+        var pathname1 = window.location.pathname;
+        alert(pathname1)
+    }
+    /*]]>*/
+</script>
+<button th:onclick="msg()">查看信息</button>
+
+</body>
+</html>

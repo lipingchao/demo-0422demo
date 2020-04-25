@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <script src="../static/js/jquery-1.9.1.min.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+</head>
+<body>
+<table class="table-bordered table-hover table table-warning disabled">
+    <tr>
+        <td>编号</td>
+        <td>登录名</td>
+        <td>手机号</td>
+        <td>邮箱</td>
+        <td>创建时间</td>
+        <td>性别</td>
+        <td>操作</td>
+    </tr>
+    <tr th:each="us,y:${userList}">
+        <td th:text="${y.count}"></td>
+        <td th:text="${us.loginName}"></td>
+        <td th:text="${us.phone}"></td>
+        <td th:text="${us.email}"></td>
+        <td th:text="${us.createTime}"></td>
+        <td th:text="${us.sex}=='1'? '男':'女'"></td>
+        <td>
+            删除，修改
+        </td>
+    </tr>
+</table>
+</body>
+</html>

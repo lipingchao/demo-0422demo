@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>图片列表管理</title>
+    <div th:include="common.html"></div>
+</head>
+<body>
+<style type="text/css">
+
+</style>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function getUserName() {
+        var userName = [[${userName}]];
+        if (null == userName) {
+            if (confirm("您貌似还未登录呢，是否前往登录页面？")) {
+                toLogin();
+            } else {
+                return "";
+            }
+        }
+    }
+
+    function BookAdd() {
+        location.href = "/book/toBookAdd";
+    }
+
+    function toLogin() {
+        location.href = "/";
+    }
+
+    function toRegister() {
+        location.href = "/register"
+    }
+
+    function locationList() {
+        window.location.href = "/book/list";
+    }
+
+    function returnBook(id) {
+        $(function () {
+            $.post('/book/returnBook', {'id': id}, function (result) {
+                if (result == "ok") {
+                    alert("归还成功！")
+                    locationList();
+                } else {
+                    alert("归还失败！");
+                    getUserName();
+                }
+            }, "json")
+        })
+    };
+
+    function Borrow(id) {
+        $(function () {
+            $.post('/book/Borrow', {'id': id}, function (result) {
+                if (result == "ok") {
+                    alert("借阅成功！")
+                    locationList();
+                } else {
+                    alert("借阅失败！");
+                    getUserName();
+                    return "";
+                }
+            }, "json")
+        })
+    }
+
+    function awesome(id) {
+        $(function () {
+            $.post('/book/awesome', {'id': id}, function (result) {
+                if (result == "ok") {
+                    alert("点赞成功！");
+                } else if (result == "notLogin") {
+                    alert("您还未登录！！");
+                } else if (result == "no") {
+                    alert("点赞失败！您已经点过赞了！！无需重复点赞");
+                }
+            })
+        })
+    }
+
+    function BorrowingRecords(id) {
+        $(function () {
+            $("#queryBorroingInfoList").html("");
+            $.post('/borro/queryAllBorrowingRecords', {'id': id}, function (list) {
+                if (list != null) {
+                    //数据的拼接
+                    var append = "";
+                    for (var i = 0; i < list.length; i++) {
+                        //时间处理
+                        var time = new Date(list[i].borrowingTime);
+                        append += " <tr>" + "<td>" + (i + 1) + "</td>" +
+                            "<td>" + list[i].bookName + "</td>" +
+                            "<td>" + time + "</td>" +
+                            "<td>" + list[i].loginName + "</td>" + "</tr>";
+                    }
+                    $("#queryBorroingInfoList").append(append);
+
+                }
+            }, "json")
+        })
+    }
+
+    /*]]>*/
+</script>
+<br>
+<span th:if="${userName}!=null">
+    <span>欢迎您的到来!尊敬的</span><span th:text="${userName}"></span><span>管理员</span>
+</span>
+<span th:if="${userName}==null">
+    <span>欢迎亲的到来，我是小娜  我可以帮助你快速的登陆，注册成为本站成员！</span>
+</span>
+
+<hr>
+<form action="/book/list" method="post">
+    书籍借出时间区间:<input type="text" name="startTime" class="date"> - <input type="text" name="endTime" class="date">
+    书籍名称:<input type="text" name="bookName">
+    <button type="submit" class="btn-success">查询</button>
+</form>
+<div>
+    <button th:onclick="'javascript:toRegister()'" class="btn">用户注册</button>
+    <button th:onclick="'javascript:toLogin()'" class="btn">用户登录</button>
+<!--    <button th:onclick="'javascript:BookAdd()'" class="btn">书籍添加</button>-->
+
+</div>
+<table class="table-bordered table-hover table table-warning disabled">
+    <thead>
+    <th>编号</th>
+    <th>书籍名称</th>
+    <th>简介</th>
+    <th>作者</th>
+    <th>借阅量</th>
+    <th>租借的状态</th>
+    <th>书籍封面</th>
+    <th>最近借出时间</th>
+    <th>点击量</th>
+    <th>编辑</th>
+    </thead>
+    <tbody>
+    <tr th:each="book,b:${bookList}">
+        <td th:text="${b.index+1}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td th:text="${book.bookIntroduce}"></td>
+        <td th:text="${book.bookAuthor}"></td>
+        <td th:text="${book.borrowingCount}"></td>
+        <td th:text="${book.borrowingFlag} eq '1'? '已借出':'未借出'"></td>
+        <td><img th:src="@{${book.picUrl}}" style="width: 60px;height: 60px"></td>
+        <td th:text="${#dates.format(book.borrowingTime,'yyyy/MM/dd HH:mm')}"></td>
+        <td th:text="${book.traffic}"></td>
+        <td>
+            <span th:if="${book.borrowingFlag} eq '1'">
+                <button th:onclick="returnBook([[${book.id}]])">归还</button>
+            </span>
+            <span th:if="${book.borrowingFlag} eq '0'">
+                <button th:onclick="Borrow([[${book.id}]])">借阅</button>
+            </span>
+            <button th:onclick="awesome([[${book.id}]])" class="btn-info">点赞</button>
+            <button class="btn-info" th:onclick="BorrowingRecords([[${book.id}]])" data-toggle="modal"
+                    data-target="#myModal">借阅记录
+            </button>
+            <button>
+                <a th:href="@{/book/Details(id=${book.id})}">详情</a>
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="11">
+            <div th:replace="PageCommon::html"></div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<!--模态框-->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1"  role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true" style="width:1100px;margin-left: -550px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    借阅记录
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row clearfix">
+                        <div class="col-md-10 column">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        编号
+                                    </th>
+                                    <th>
+                                        图书名称
+                                    </th>
+                                    <th>
+                                        借阅时间
+                                    </th>
+                                    <th>
+                                        借阅用户
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody id="queryBorroingInfoList">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+</body>
+</html>

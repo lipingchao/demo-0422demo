@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo0422demo.dao.TBootMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo0422demo.pojo.TBoot">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="BOOK_AUTHOR" jdbcType="VARCHAR" property="bookAuthor" />
+    <result column="BOOK_INTRODUCE" jdbcType="VARCHAR" property="bookIntroduce" />
+    <result column="BOOK_NAME" jdbcType="VARCHAR" property="bookName" />
+    <result column="BORROWING_COUNT" jdbcType="DECIMAL" property="borrowingCount" />
+    <result column="BORROWING_FLAG" jdbcType="VARCHAR" property="borrowingFlag" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="PIC_URL" jdbcType="VARCHAR" property="picUrl" />
+    <result column="TRAFFIC" jdbcType="DECIMAL" property="traffic" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List">
+    ID, BOOK_AUTHOR, BOOK_INTRODUCE, BOOK_NAME, BORROWING_COUNT, BORROWING_FLAG, CREATE_TIME, 
+    PIC_URL, TRAFFIC
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BOOT
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T_BOOT
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.demo0422demo.pojo.TBootExample">
+    delete from T_BOOT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.demo0422demo.pojo.TBoot">
+    insert into T_BOOT (ID, BOOK_AUTHOR, BOOK_INTRODUCE, 
+      BOOK_NAME, BORROWING_COUNT, BORROWING_FLAG, 
+      CREATE_TIME, PIC_URL, TRAFFIC
+      )
+    values (#{id,jdbcType=VARCHAR}, #{bookAuthor,jdbcType=VARCHAR}, #{bookIntroduce,jdbcType=VARCHAR}, 
+      #{bookName,jdbcType=VARCHAR}, #{borrowingCount,jdbcType=DECIMAL}, #{borrowingFlag,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{picUrl,jdbcType=VARCHAR}, #{traffic,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo0422demo.pojo.TBoot">
+    insert into T_BOOT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="bookAuthor != null">
+        BOOK_AUTHOR,
+      </if>
+      <if test="bookIntroduce != null">
+        BOOK_INTRODUCE,
+      </if>
+      <if test="bookName != null">
+        BOOK_NAME,
+      </if>
+      <if test="borrowingCount != null">
+        BORROWING_COUNT,
+      </if>
+      <if test="borrowingFlag != null">
+        BORROWING_FLAG,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="picUrl != null">
+        PIC_URL,
+      </if>
+      <if test="traffic != null">
+        TRAFFIC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="bookAuthor != null">
+        #{bookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="bookIntroduce != null">
+        #{bookIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="bookName != null">
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingCount != null">
+        #{borrowingCount,jdbcType=DECIMAL},
+      </if>
+      <if test="borrowingFlag != null">
+        #{borrowingFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="traffic != null">
+        #{traffic,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.demo0422demo.pojo.TBootExample" resultType="java.lang.Integer">
+    select count(*) from T_BOOT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update T_BOOT
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookAuthor != null">
+        BOOK_AUTHOR = #{record.bookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookIntroduce != null">
+        BOOK_INTRODUCE = #{record.bookIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookName != null">
+        BOOK_NAME = #{record.bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.borrowingCount != null">
+        BORROWING_COUNT = #{record.borrowingCount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.borrowingFlag != null">
+        BORROWING_FLAG = #{record.borrowingFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.picUrl != null">
+        PIC_URL = #{record.picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.traffic != null">
+        TRAFFIC = #{record.traffic,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update T_BOOT
+    set ID = #{record.id,jdbcType=VARCHAR},
+      BOOK_AUTHOR = #{record.bookAuthor,jdbcType=VARCHAR},
+      BOOK_INTRODUCE = #{record.bookIntroduce,jdbcType=VARCHAR},
+      BOOK_NAME = #{record.bookName,jdbcType=VARCHAR},
+      BORROWING_COUNT = #{record.borrowingCount,jdbcType=DECIMAL},
+      BORROWING_FLAG = #{record.borrowingFlag,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      PIC_URL = #{record.picUrl,jdbcType=VARCHAR},
+      TRAFFIC = #{record.traffic,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo0422demo.pojo.TBoot">
+    update T_BOOT
+    <set>
+      <if test="bookAuthor != null">
+        BOOK_AUTHOR = #{bookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="bookIntroduce != null">
+        BOOK_INTRODUCE = #{bookIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="bookName != null">
+        BOOK_NAME = #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingCount != null">
+        BORROWING_COUNT = #{borrowingCount,jdbcType=DECIMAL},
+      </if>
+      <if test="borrowingFlag != null">
+        BORROWING_FLAG = #{borrowingFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="picUrl != null">
+        PIC_URL = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="traffic != null">
+        TRAFFIC = #{traffic,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <select id="selectByExample" parameterType="com.example.demo0422demo.pojo.TBootExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_BOOT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+
+
+
+
+
+
+  <resultMap id="BaseResultMapVo" type="com.example.demo0422demo.vo.BookVo">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="BOOK_AUTHOR" jdbcType="VARCHAR" property="bookAuthor" />
+    <result column="BOOK_INTRODUCE" jdbcType="VARCHAR" property="bookIntroduce" />
+    <result column="BOOK_NAME" jdbcType="VARCHAR" property="bookName" />
+    <result column="BORROWING_COUNT" jdbcType="DECIMAL" property="borrowingCount" />
+    <result column="BORROWING_FLAG" jdbcType="VARCHAR" property="borrowingFlag" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="PIC_URL" jdbcType="VARCHAR" property="picUrl" />
+    <result column="BORROWINGNEWTIME" property="borrowingTime" />
+    <result column="traffic" property="traffic" />
+  </resultMap>
+  <select id="list" parameterType="com.example.demo0422demo.vo.BookVo" resultMap="BaseResultMapVo">
+    select *
+    from (select tb.*,
+    tb.BORROWING_FLAG as flag,
+    case
+    when tb.BORROWING_FLAG = 0 then '未借出'
+    when tb.BORROWING_FLAG = 1 then '已借出'
+    end           as borrowingFlag,
+    (select a.BORROWING_TIME
+    from (select bb.BORROWING_TIME, bb.id, bb.BOOK_ID
+    from T_BORROWING_BOOK bb
+    order by bb.BORROWING_TIME desc) a
+    where ROWNUM = 1
+    and a.BOOK_ID = tb.id
+    )                 as borrowingNewTime
+    from T_BOOT tb) c
+
+    where 1 = 1
+    <if test="bookAuthor!=null and bookAuthor!=''">
+      and c.BOOK_AUTHOR like concat(concat('%',#{bookAuthor},'%'))
+    </if>
+    <if test="bookIntroduce!=null and bookIntroduce!=''">
+      and c.BOOK_INTRODUCE like concat(concat('%',#{bookIntroduce},'%'))
+    </if>
+    <if test="bookName!=null and bookName!='' ">
+      and  c.BOOK_NAME like concat(concat('%',#{bookName}),'%')
+    </if>
+    <if test="borrowingCount!=null">
+      and c.BORROWING_COUNT =#{borrowingCount}
+    </if>
+    <if test="borrowingFlag!=null and borrowingFlag!=''">
+      and c.BORROWING_FLAG like concat(concat('%',#{borrowingFlag},'%'))
+    </if>
+    <if test="startTime!=null and endTime!=null">
+      and c.borrowingNewTime between #{startTime} and #{endTime}
+    </if>
+
+  </select>
+
+
+  <update id="updateByPrimaryKey" parameterType="com.example.demo0422demo.pojo.TBoot">
+    update T_BOOT
+    set BOOK_AUTHOR = #{bookAuthor,jdbcType=VARCHAR},
+      BOOK_INTRODUCE = #{bookIntroduce,jdbcType=VARCHAR},
+      BOOK_NAME = #{bookName,jdbcType=VARCHAR},
+      BORROWING_COUNT = #{borrowingCount,jdbcType=DECIMAL},
+      BORROWING_FLAG = #{borrowingFlag,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      PIC_URL = #{picUrl,jdbcType=VARCHAR},
+      TRAFFIC = #{traffic,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

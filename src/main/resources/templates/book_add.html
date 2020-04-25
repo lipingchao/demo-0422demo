@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="common.html"></div>
+</head>
+<body>
+<script>
+    $(function () {
+        $("#bookName").blur(function () {
+            var bookName = $("#bookName").val();
+            if(null!=bookName){
+                $.post('/book/checkBookName',{'bookName':bookName},function (result) {
+                    if(result=="ok"){
+                        $("#t1").html("书籍已存在，请更名后再试");
+                        $("#sb").prop('disabled',true);
+                    }else {
+                        $("#t1").html("");
+                        $("#sb").prop('disabled',false);
+                    }
+                },"json")
+            }
+        })
+    })
+</script>
+<form action="/book/addBook" method="post" enctype="multipart/form-data">
+    <ul>
+        <li>作者： <input type="text" name="bookAuthor"></li>
+        <li>简介： <textarea class="textarea" name="bookIntroduce" style="width:700px;height:300px;"></textarea></li>
+        <li>书名： <input type="text" name="bookName" id="bookName">
+                <font id="t1" color="red"></font>
+        </li>
+        <li>图片： <input type="file" name="file"></li>
+        <li>
+            <button id="sb">提交</button>
+        </li>
+    </ul>
+</form>
+</body>
+</html>

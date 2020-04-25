@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PageCommon</title>
+</head>
+<style>
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .btn:hover,
+    .btn:focus,
+    .btn.focus {
+        color: #333;
+        text-decoration: none;
+    }
+</style>
+<body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function pageForm(pageNum) {
+        var pageForm = document.getElementById("pageForm");
+        var path = window.location.pathname;
+        pageForm.action = path;
+        document.getElementById('current').value = pageNum;
+        pageForm.submit();
+    }
+    function jumpSelect() {
+        var pageNum = document.getElementById('AllPage').value;
+        pageForm(pageNum);
+    }
+    function jumpsinPut() {
+        var pageNum = document.getElementById('jump').value;
+        pageForm(pageNum);
+    }
+    /*]]>*/
+</script>
+<div style="text-align: center">
+    <form method="post" enctype="application/x-www-form-urlencoded" id="pageForm">
+        <input type="hidden" id="current" name="current">
+        当前 <span th:text="${page.pageNum}"></span>/<span th:text="${page.pages}"></span>页
+        当前共<span th:text="${page.total}"></span>条
+        当每页<span th:text="${page.pageSize}"></span>条
+        <input type="text" id="jump" th:value="${page.pageNum}" style="width: 10px;margin-top: 10px">
+<!--        <select id="AllPage" style="width: 50px;margin-top: 10px">
+            <option th:if="${s.index}!=0" th:each="pg,s:${page.getList()}" th:value="${s.index}" th:text="${s.index}"></option>
+        </select>-->
+        <button th:onclick="jumpsinPut()" class="btn">跳</button>
+        <button th:onclick="pageForm(1)" class="btn" id="firstPage">首页</button>
+        <button th:onclick="pageForm([[${page.prePage}]])" id="prePage" class="btn">上一页</button>
+        <button th:onclick="pageForm([[${page.nextPage}]])" id="nextPage" class="btn">下一页</button>
+        <button th:onclick="pageForm([[${page.pages}]])" id="pages" class="btn">尾页</button>
+    </form>
+</div>
+</body>
+</html>
